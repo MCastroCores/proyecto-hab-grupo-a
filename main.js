@@ -1,48 +1,35 @@
 'use strict'
 
-// !Flip card logic
+const cartas = document.querySelectorAll('.card');
 
-// console.log(cards);
-// console.log(cards[0]);
-// console.log(cards[0]);
-// console.log(cards[0].firstElementChild.lastElementChild.textContent);
+const tablero = document.querySelector('.container');
 
-// const reveal = (e) => {
-//   const currentCard = e.currentTarget;
-//   currentCard.classList.add("flipped");
+console.log(cartas);
 
-//   setTimeout(() => {
-//     currentCard.classList.remove("flipped");
-//   }, 1000);
-// };
+const cartasArray = Array.from(cartas);
 
-// for (const card of cards) {
-//   card.addEventListener("click", reveal);
-// }
+console.log(cartasArray);
 
+let j = 0;
 
+function barajar (array) {
+    for (let i = 0; i < array.length; i++){
 
-// ! Aquí empieza nuestra lógica
+        let j = Math.floor(Math.random()* (i+1)) 
 
-// const content = document.querySelector('.content');
-// console.log(card);
+        console.log(j);
 
-// const cartasArray = Array.from(card);
-// console.log(cardArray);
+        [array[i], array[j]] = [array[j], array[i]]
 
-// let j = 0;
-// function barajar (array) {
-//     for (let i = 0; i < array.length; i++){
-//         let j = Math.floor(Math.random()* (i+1)) 
-//         console.log(j);
-//         [array[i], array[j]] = [array[j], array[i]]
-//     }
-// }
+    }
 
-// barajar(cartasArray)
-// cartasArray.forEach(card => {
-//     content.append(card)
-// });
+}
+
+barajar(cartasArray)
+
+cartasArray.forEach(carta => {
+    tablero.append(carta)
+});
 
 const cards = document.querySelectorAll(".card");
 const result = document.querySelector('.result');
@@ -92,6 +79,7 @@ const reveal = (e) => {
         firstCard = null;
       }, 1000);
       contador ++;
+      result.textContent = contador;
     }
   }
       numDeclicks++
@@ -111,9 +99,3 @@ for (const card of cards) {
 function resetearJuego() {
   location.reload();
 }
- // Recargar la página
-/* Falta:
-1) Contador
-2) Distribución cartas aleatoria
-3) Reset del juego
-4) await evento para siguiente intento */
