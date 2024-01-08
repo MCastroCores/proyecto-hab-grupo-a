@@ -1,8 +1,6 @@
-'use stric'
+'use strict'
 
 // !Flip card logic
-
-const cards = document.querySelectorAll(".card");
 
 // console.log(cards);
 // console.log(cards[0]);
@@ -26,17 +24,50 @@ const cards = document.querySelectorAll(".card");
 
 // ! Aquí empieza nuestra lógica
 
+// const content = document.querySelector('.content');
+// console.log(card);
+
+// const cartasArray = Array.from(card);
+// console.log(cardArray);
+
+// let j = 0;
+// function barajar (array) {
+//     for (let i = 0; i < array.length; i++){
+//         let j = Math.floor(Math.random()* (i+1)) 
+//         console.log(j);
+//         [array[i], array[j]] = [array[j], array[i]]
+//     }
+// }
+
+// barajar(cartasArray)
+// cartasArray.forEach(card => {
+//     content.append(card)
+// });
+
+const cards = document.querySelectorAll(".card");
+const result = document.querySelector('.result');
 
 let firstCard = null
+let numDeclicks = 0
+let contador = 0;
+let contadorFlipped = 0;
+
+const finalizar = () => {
+  if (contadorFlipped === 8){
+    console.log('Has ganado');
+  } else {
+    console.log('no has ganado');
+  }
+}
 
 const reveal = (e) => {
-  const currentCard = e.currentTarget;
-  currentCard.classList.add("flipped");
-
- 
+  if (numDeclicks < 2) {
+    const currentCard = e.currentTarget;
+    currentCard.classList.add("flipped");
 
   if (firstCard === null) {
-    firstCard = currentCard
+    firstCard = currentCard;
+    return;
   } else if (firstCard !== null)  {
     const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
     const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
@@ -45,10 +76,13 @@ const reveal = (e) => {
       console.log("coinciden");
       currentCard.removeEventListener('click', reveal);
       firstCard.removeEventListener('click', reveal);
-
+      contador ++;
+      result.textContent = contador;
       firstCard = null;
-
-      return;
+      contadorFlipped ++;
+      console.log(contadorFlipped);
+      finalizar();
+      return contadorFlipped;
 
     } else {
       
@@ -57,9 +91,16 @@ const reveal = (e) => {
         currentCard.classList.remove("flipped");
         firstCard = null;
       }, 1000);
-
+      contador ++;
     }
-
+  }
+      numDeclicks++
+      if (numDeclicks = 2){
+        setTimeout(() => {
+          numDeclicks = 0
+    
+        }, 1050);
+    }
   }
 };
 
@@ -67,7 +108,10 @@ for (const card of cards) {
   card.addEventListener("click", reveal);
 
 }
-
+function resetearJuego() {
+  location.reload();
+}
+ // Recargar la página
 /* Falta:
 1) Contador
 2) Distribución cartas aleatoria
