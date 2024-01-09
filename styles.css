@@ -4,15 +4,24 @@
   padding: 0;
 }
 
+:root {
+  --morado1: rgb(61, 0, 102);
+  --morado2: rgb(81, 0, 135); 
+  --morado3: rgb(92, 0, 153);
+  --amarillo1: rgb(253, 197, 0);
+  --amarillo2: rgb(255, 213, 0);
+}
+
 body {
-  background-color: crimson;
-  font-family: sans-serif;
+  background-color: rgb(22, 21, 21);
+  font-family: 'Press Start 2P', system-ui;
   font-weight: bold;
   height: 100vh;
   overflow: hidden;
   padding: 1.5rem;
   max-width: 1100px;
   margin: 0 auto;
+  color: rgb(165, 165, 165);
   display: grid;
   grid-template-rows: 5% auto;
   grid-template-columns: 5fr 1fr;
@@ -27,7 +36,7 @@ header {
   text-align: center;
   align-items: center;
   justify-content: center;
-  background-color: yellowgreen;
+  background-color: var(--morado2);
 }
 
 .tablero {
@@ -35,14 +44,13 @@ header {
   grid-area: main;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  background-color: lightblue;
+  background-color: var(--morado2);
   position: relative;
 }
 
 .carta {
   width: 100%;
   height: 100%;
-  border: 1px solid gray;
   padding: 1rem;
   display: flex;
   justify-content: center;
@@ -68,23 +76,23 @@ header {
 .back {
   height: 100%;
   width: 100%;
-  background: linear-gradient(black, gray);
+  background: linear-gradient(var(--amarillo1), rgb(88, 88, 88));
   display: grid;
   position: absolute;
   place-content: center;
-  font-size: 1rem;
+  font-size: 4rem;
   border-radius: 0.5rem;
   backface-visibility: hidden;
   user-select: none;
 }
 
 .back {
-  background: linear-gradient(steelblue, lightsteelblue);
+  background: linear-gradient(rgb(182, 181, 181), rgb(79, 45, 173));
   transform: rotateY(180deg);
 }
 
 aside {
-  background-color: hotpink;
+  background-color: var(--morado1);
   grid-area: aside;
   height: 100%;
   display: flex;
@@ -179,7 +187,7 @@ form {
   gap: 60px;
   padding: 2rem;
   border-radius: 10px;
-  background-color: rgb(6, 6, 54);
+  background-color: var(--morado1);
 }
 
 form button {
@@ -194,6 +202,7 @@ form button {
   color: white;
   letter-spacing: 1px;
   cursor: pointer;
+  font-family: 'Press Start 2P', system-ui;
 }
 
 form input {
@@ -207,6 +216,7 @@ form input {
   color: white;
   caret-color: white;
   border-radius: 5px;
+  font-family: 'Press Start 2P', system-ui;
 }
 
 input:focus {
@@ -227,4 +237,17 @@ form input::placeholder {
   position: absolute;
   top: 35%;
   right: 45%;
+}
+
+button.reset {
+  font-family: "Press Start 2P", system-ui;
+  padding: 0.5rem;
+  width: 100px;
+  height: 100px;
+  border-radius: 75px;
+  background-color: var(--morado3);
+  color: var(--amarillo1);
+  border: 1px solid var(--amarillo1);
+  cursor: pointer;
+  box-shadow: 1px 1px 0.8;
 }
