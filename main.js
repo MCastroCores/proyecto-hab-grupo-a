@@ -1,101 +1,243 @@
 'use strict'
-
-const cartas = document.querySelectorAll('.card');
-
-const tablero = document.querySelector('.container');
-
-console.log(cartas);
-
-const cartasArray = Array.from(cartas);
-
-console.log(cartasArray);
-
-let j = 0;
-
-function barajar (array) {
-    for (let i = 0; i < array.length; i++){
-
-        let j = Math.floor(Math.random()* (i+1)) 
-
-        console.log(j);
-
-        [array[i], array[j]] = [array[j], array[i]]
-
-    }
-
-}
-
-barajar(cartasArray)
-
-cartasArray.forEach(carta => {
-    tablero.append(carta)
-});
-
+// TODO. AQUÍ EMPIEZAN LAS CONSTANTES
+//* Constantes del HTML
 const cards = document.querySelectorAll(".card");
-const result = document.querySelector('.result');
+let firstCard = null;
+let numDeclicks = 0;
 
-let firstCard = null
-let numDeclicks = 0
+//* Constantes del JUEGO 
+const tablero = document.querySelector('.tablero');
+const celdas = document.querySelectorAll('.carta');
+
+//* Constantes del FINAL
+const result = document.querySelector('.result');
 let contador = 0;
 let contadorFlipped = 0;
 
-const finalizar = () => {
-  if (contadorFlipped === 8){
-    console.log('Has ganado');
-  } else {
-    console.log('no has ganado');
-  }
-}
+// *Constantes Barajar
 
-const reveal = (e) => {
-  if (numDeclicks < 2) {
-    const currentCard = e.currentTarget;
-    currentCard.classList.add("flipped");
+const cartasArray = Array.from(celdas);
+let j = 0;
 
-  if (firstCard === null) {
-    firstCard = currentCard;
-    return;
-  } else if (firstCard !== null)  {
-    const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
-    const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
+// TODO. AQUÍ EMPIEZAN LAS FUNCIONES
+//*Funcion Barajar 
 
-    if (firstCardValue === secondCardValue) {
-      console.log("coinciden");
-      currentCard.removeEventListener('click', reveal);
-      firstCard.removeEventListener('click', reveal);
-      contador ++;
-      result.textContent = contador;
-      firstCard = null;
-      contadorFlipped ++;
-      console.log(contadorFlipped);
-      finalizar();
-      return contadorFlipped;
-
-    } else {
-      
-      setTimeout(() => {
-        firstCard.classList.remove("flipped");
-        currentCard.classList.remove("flipped");
-        firstCard = null;
-      }, 1000);
-      contador ++;
-      result.textContent = contador;
+function barajar (array) {
+      for (let i = 0; i < array.length; i++){
+            let j = Math.floor(Math.random()* (i+1)) 
+        console.log(j);
+        [array[i], array[j]] = [array[j], array[i]]
     }
-  }
-      numDeclicks++
-      if (numDeclicks = 2){
-        setTimeout(() => {
-          numDeclicks = 0
-    
-        }, 1050);
-    }
-  }
+      array.forEach(carta => {
+            tablero.append(carta)
+        });
 };
 
+
+//* Función Mostrar Cartas
+
+function mostrarCartas() {
+  cards.forEach(card => {
+    card.classList.add("flipped");
+    
+  });
+  setTimeout(() => {
+    cards.forEach(card => {
+      card.classList.remove("flipped")
+    });
+  }, 6000);
+};
+
+
+  // * Función Felicitar
+  function felicitar() {
+    const congrats = document.createElement('p');
+    congrats.classList.add("felicitar");
+    congrats.textContent = "WELL DONE!";
+    tablero.append(congrats);
+    setTimeout(() => {
+      congrats.remove();
+    }, 1000);
+  };
+  
+  // *Funcion HAS GANADO
+  function finalJuego() {
+    const hasGanadoModal = document.createElement('div');    
+    hasGanadoModal.classList.add("fondo");
+    hasGanadoModal.innerHTML = `
+    <div class="finalJuego">YOU WON!</div>
+    `;
+    tablero.append(hasGanadoModal);
+    btnReset.textContent = 'Prueba otra vez';
+  }
+
+  // * Funcion Fin de Juego
+  
+  const finalizar = () => {
+    if (contadorFlipped === 8){
+      finalJuego();
+    } else {
+      felicitar();
+    };
+  };
+
+  //* Función RESET
+
+function reset() {
+    contador = 0;
+    result.textContent = 0;
+    firstCard = null;
+    iniciarJuego();
+    for (const card of cards) {
+      card.classList.remove('flipped');
+      card.addEventListener("click", reveal); 
+    }
+    if (contadorFlipped === 8) {
+      const hasGanadoModalDuplicado = document.querySelector('.fondo');
+      hasGanadoModalDuplicado.remove();
+      
+    }
+    contadorFlipped = 0;
+  }
+
+  // * Boton Reset
+  
+  const btnReset = document.querySelector(".reset");
+  btnReset.addEventListener('click', () => {
+    reset();
+  });
+
+  // * Función Juego
+  const reveal = (e) => {
+    if (numDeclicks < 2) {
+    const currentCard = e.currentTarget;
+     if (currentCard.classList.contains("flipped")) {
+      return;
+    }
+    currentCard.classList.add("flipped");
+    if (firstCard === null) {
+      firstCard = currentCard;
+      return;
+    } else if (firstCard !== null)  {
+      const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
+      const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
+
+      if (firstCardValue === secondCardValue) {
+        console.log("coinciden");
+        currentCard.removeEventListener('click', reveal);
+        firstCard.removeEventListener('click', reveal);
+        contador ++;
+        result.textContent = contador;
+        firstCard = null;
+        contadorFlipped ++;
+        console.log(contadorFlipped);
+        finalizar();
+        return contadorFlipped;
+        
+      } else {
+        
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          currentCard.classList.remove("flipped");
+          firstCard = null;
+        }, 1000);
+        contador ++;
+        result.textContent = contador;
+      }
+    }
+    numDeclicks++
+    if (numDeclicks = 2){
+      setTimeout(() => {
+        numDeclicks = 0
+        
+      }, 1050);
+      }
+    }
+};
+
+// TODO. AQUÍ EMPIEZAN LA PILA DE EJECUCIÓN
+// ? AQUÍ ORDENAMOS CODIGO EN FUNCIÓN DE SUS PASOS
+
+function iniciarJuego() {
+  barajar(cartasArray);
+  const start = setTimeout(() => {
+    mostrarCartas(cards);
+    // * Constantes Cuenta Atrás
+    let cronometro = 5;
+     let intervalo = document.querySelector(".cuentaatras")
+     let seccioninicio = document.querySelector(".iniciocontador")
+    
+    //  * Función Cuenta Atrás
+     let iniciojuego = setInterval(() => {
+       intervalo.textContent = cronometro;
+       seccioninicio.classList.remove("invisible")
+       cronometro--;
+       if(cronometro === -1){
+         clearInterval(iniciojuego);
+         seccioninicio.classList.add("invisible");
+        };
+      }, 1000); 
+  }, 500);
+}
+
+iniciarJuego();
+
+// * Bucle Cartas
 for (const card of cards) {
-  card.addEventListener("click", reveal);
+  card.addEventListener("click", reveal);  
+}
+
+//
+//! CÓDIGO PARA EJECUTAR EL PROMPT DEL PRINCIPIO
+
+const btn = document.querySelector('.btnStart');
+
+const form = document.forms[0]
+
+const pObligatorio = document.querySelector('.obligatorio');
+function validateName(input) {
+    if (input.value === '') {
+      pObligatorio.textContent = 'Campo Obligatorio *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else if (input.value.length < 3) {
+      pObligatorio.textContent = 'Name too short *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else if (input.value.length > 12){
+      pObligatorio.textContent = 'Name too long *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else {
+      pObligatorio.textContent = '';
+      return input.value;
+    }
+}
+
+function createUserName(userName) {
+    const newUser = document.createElement('p');
+    newUser.textContent = userName;
+
+    return newUser;
 
 }
-function resetearJuego() {
-  location.reload();
-}
+
+
+form.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+    const userName = validateName(form.name);
+
+    if (userName === null) {
+        return;
+    } 
+
+    const newUser = createUserName(userName);
+    const player = document.querySelector('.player');
+    player.appendChild(newUser)
+    form.classList.add('invisible')
+
+   reset();
+
+
+})

@@ -7,101 +7,138 @@
     <title>JUEGO DE CARTAS</title>
   </head>
   <body>
+    <form class="prompt">
+      <div class="ventana">
+        <input type="text" name="name" placeholder="User name..." />
+        <p class="obligatorio"></p>
+        <button class="btnStart" type="submit">START GAME</button>
+      </div>
+    </form>
     <header>
       <h1>JUEGO DE PAREJAS</h1>
     </header>
-    <main>
-      <div class="container">
+    <main class="tablero">
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
-            <div class="back monkey">🐒</div>
+            <div class="back">🐒</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
-            <div class="back monkey">🐒</div>
+            <div class="back">🐒</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦄</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦄</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐍</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐍</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐥</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐥</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐳</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐳</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦜</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦜</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦁</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🦁</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
             <div class="back">🐡</div>
           </div>
         </section>
+      </div>
+      <div class="carta">
         <section class="card">
           <div class="content">
             <div class="front">❔</div>
@@ -112,10 +149,15 @@
     </main>
     <aside>
       <section>
-        <article>JUGADOR</article>
+        <article class="player">JUGADOR</article>
         <article>NUMERO DE INTENTOS</article>
         <article class="result">0</article>
       </section>
+      <section class="iniciocontador invisible">
+        Empieza en:
+        <p class="cuentaatras"></p>
+      </section>
+      <button class="reset">Reiniciar</button>
     </aside>
     <script src="./main.js"></script>
   </body>
