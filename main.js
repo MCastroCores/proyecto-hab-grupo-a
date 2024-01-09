@@ -47,49 +47,52 @@ const finalizar = () => {
   }
 }
 
+
 const reveal = (e) => {
   if (numDeclicks < 2) {
     const currentCard = e.currentTarget;
+     if (currentCard.classList.contains("flipped")) {
+      return;
+    }
     currentCard.classList.add("flipped");
+    if (firstCard === null) {
+      firstCard = currentCard;
+      return;
+    } else if (firstCard !== null)  {
+      const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
+      const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
 
-  if (firstCard === null) {
-    firstCard = currentCard;
-    return;
-  } else if (firstCard !== null)  {
-    const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
-    const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
-
-    if (firstCardValue === secondCardValue) {
-      console.log("coinciden");
-      currentCard.removeEventListener('click', reveal);
-      firstCard.removeEventListener('click', reveal);
-      contador ++;
-      result.textContent = contador;
-      firstCard = null;
-      contadorFlipped ++;
-      console.log(contadorFlipped);
-      finalizar();
-      return contadorFlipped;
-
-    } else {
-      
-      setTimeout(() => {
-        firstCard.classList.remove("flipped");
-        currentCard.classList.remove("flipped");
+      if (firstCardValue === secondCardValue) {
+        console.log("coinciden");
+        currentCard.removeEventListener('click', reveal);
+        firstCard.removeEventListener('click', reveal);
+        contador ++;
+        result.textContent = contador;
         firstCard = null;
-      }, 1000);
-      contador ++;
-      result.textContent = contador;
-    }
-  }
-      numDeclicks++
-      if (numDeclicks = 2){
+        contadorFlipped ++;
+        console.log(contadorFlipped);
+        finalizar();
+        return contadorFlipped;
+
+      } else {
+        
         setTimeout(() => {
-          numDeclicks = 0
-    
-        }, 1050);
+          firstCard.classList.remove("flipped");
+          currentCard.classList.remove("flipped");
+          firstCard = null;
+        }, 1000);
+        contador ++;
+        result.textContent = contador;
+      }
     }
-  }
+        numDeclicks++
+        if (numDeclicks = 2){
+          setTimeout(() => {
+            numDeclicks = 0
+      
+          }, 1050);
+      }
+    }
 };
 
 for (const card of cards) {
