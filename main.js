@@ -1,5 +1,5 @@
 'use strict'
-
+// TODO. AQUÍ EMPIEZAN LAS CONSTANTES
 //* Constantes del HTML
 const cards = document.querySelectorAll(".card");
 let firstCard = null;
@@ -19,6 +19,7 @@ let contadorFlipped = 0;
 const cartasArray = Array.from(celdas);
 let j = 0;
 
+// TODO. AQUÍ EMPIEZAN LAS FUNCIONES
 //*Funcion Barajar 
 
 function barajar (array) {
@@ -48,8 +49,6 @@ function mostrarCartas() {
 };
 
 
-
-
   // * Función Felicitar
   function felicitar() {
     const congrats = document.createElement('p');
@@ -69,6 +68,7 @@ function mostrarCartas() {
     <div class="finalJuego">YOU WON!</div>
     `;
     tablero.append(hasGanadoModal);
+    btnReset.textContent = 'Prueba otra vez';
   }
 
   // * Funcion Fin de Juego
@@ -81,15 +81,32 @@ function mostrarCartas() {
     };
   };
 
+  //* Función RESET
+
+function reset() {
+    contador = 0;
+    result.textContent = 0;
+    firstCard = null;
+    iniciarJuego();
+    for (const card of cards) {
+      card.classList.remove('flipped');
+      card.addEventListener("click", reveal); 
+    }
+    if (contadorFlipped === 8) {
+      const hasGanadoModalDuplicado = document.querySelector('.fondo');
+      hasGanadoModalDuplicado.remove();
+      
+    }
+    contadorFlipped = 0;
+  }
+
   // * Boton Reset
   
   const btnReset = document.querySelector(".reset");
   btnReset.addEventListener('click', () => {
-    // location.reload();
-    iniciarJuego();
-    // hasGanadoModal.classList.add();
+    reset();
   });
-  
+
   // * Función Juego
   const reveal = (e) => {
     if (numDeclicks < 2) {
@@ -138,6 +155,7 @@ function mostrarCartas() {
     }
 };
 
+// TODO. AQUÍ EMPIEZAN LA PILA DE EJECUCIÓN
 // ? AQUÍ ORDENAMOS CODIGO EN FUNCIÓN DE SUS PASOS
 
 function iniciarJuego() {
@@ -169,4 +187,57 @@ for (const card of cards) {
   card.addEventListener("click", reveal);  
 }
 
-//*
+//
+//! CÓDIGO PARA EJECUTAR EL PROMPT DEL PRINCIPIO
+
+const btn = document.querySelector('.btnStart');
+
+const form = document.forms[0]
+
+const pObligatorio = document.querySelector('.obligatorio');
+function validateName(input) {
+    if (input.value === '') {
+      pObligatorio.textContent = 'Campo Obligatorio *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else if (input.value.length < 3) {
+      pObligatorio.textContent = 'Name too short *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else if (input.value.length > 12){
+      pObligatorio.textContent = 'Name too long *'
+      pObligatorio.classList.add('invalid');
+      return null; 
+    } else {
+      pObligatorio.textContent = '';
+      return input.value;
+    }
+}
+
+function createUserName(userName) {
+    const newUser = document.createElement('p');
+    newUser.textContent = userName;
+
+    return newUser;
+
+}
+
+
+form.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+    const userName = validateName(form.name);
+
+    if (userName === null) {
+        return;
+    } 
+
+    const newUser = createUserName(userName);
+    const player = document.querySelector('.player');
+    player.appendChild(newUser)
+    form.classList.add('invisible')
+
+   reset();
+
+
+})
