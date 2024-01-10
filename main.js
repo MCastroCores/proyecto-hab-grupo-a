@@ -10,6 +10,7 @@ const tablero = document.querySelector('.tablero');
 const celdas = document.querySelectorAll('.carta');
 const tries = document.querySelector('.tries');
 const player = document.querySelector('.player');
+const ranking = document.querySelector('.rank');
 
 //* Constantes del FINAL
 const result = document.querySelector('.result');
@@ -71,7 +72,52 @@ function mostrarCartas() {
     `;
     tablero.append(hasGanadoModal);
     btnReset.textContent = 'Prueba otra vez';
+
+    console.log(player.firstElementChild.textContent);   
+
+    let rankPlayer = player.firstElementChild.textContent;
+
+    let rankResult = result.textContent;
+
+    saveRanking(rankPlayer, rankResult);
   }
+  
+
+
+function saveRanking(rankPlayer, rankResult) {
+
+  
+  
+  const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
+
+  savedScores.push({rankPlayer, rankResult});
+
+  savedScores.sort((a, b) => {b.rankResult - a.rankResult});
+
+  localStorage.setItem('scores', JSON.stringify(savedScores));
+  
+}
+
+function getRanking() {
+  
+  const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
+  
+  console.log(savedScores);
+
+  const player1 = document.querySelector('.top-players');
+  
+  player1.innerHTML =`
+  <p>${savedScores[0].rankPlayer}:${savedScores[0].rankResult}</p>
+  <p>${savedScores[1].rankPlayer}:${savedScores[1].rankResult}</p>
+  <p>${savedScores[2].rankPlayer}:${savedScores[2].rankResult}</p>
+  `
+
+  return savedScores;
+
+}
+
+
+
 
   // * Funcion Fin de Juego
   
@@ -100,6 +146,9 @@ function reset() {
       
     }
     contadorFlipped = 0;
+
+    getRanking();
+
   }
 
   // * Boton Reset
@@ -111,6 +160,7 @@ function reset() {
          player.classList.add('invisible');
          tries.classList.add('invisible');
          result.classList.add('invisible');
+         ranking.classList.add('invisible');
   });
 
   // * Función Juego
@@ -161,6 +211,64 @@ function reset() {
     }
 };
 
+//! CÓDIGO PARA EJECUTAR EL PROMPT DEL PRINCIPIO
+
+const btn = document.querySelector('.btnStart');
+
+const form = document.forms[0]
+
+const pObligatorio = document.querySelector('.obligatorio');
+
+function validateName(input) {
+  if (input.value === '') {
+    pObligatorio.textContent = 'Campo Obligatorio *'
+    pObligatorio.classList.add('invalid');
+    return null; 
+  } else if (input.value.length < 3) {
+    pObligatorio.textContent = 'Name too short *'
+    pObligatorio.classList.add('invalid');
+    return null; 
+  } else if (input.value.length > 12){
+    pObligatorio.textContent = 'Name too long *'
+    pObligatorio.classList.add('invalid');
+    return null; 
+  } else {
+    pObligatorio.textContent = '';
+    return input.value;
+  }
+}
+
+function createUserName(userName) {
+  const newUser = document.createElement('p');
+  newUser.textContent = userName.toUpperCase();
+  newUser.style.margin = '15px';
+  return newUser;
+}
+  
+
+form.addEventListener('submit', (event) => {
+  
+  event.preventDefault();
+  const userName = validateName(form.name);
+  
+  if (userName === null) {
+    return;
+  } 
+  
+  const newUser = createUserName(userName);
+  player.appendChild(newUser)
+  form.classList.add('invisible')
+  
+  reset();
+
+  getRanking();
+
+  
+  
+});
+
+
+
 // TODO. AQUÍ EMPIEZAN LA PILA DE EJECUCIÓN
 // ? AQUÍ ORDENAMOS CODIGO EN FUNCIÓN DE SUS PASOS
 
@@ -173,7 +281,7 @@ function iniciarJuego() {
      let intervalo = document.querySelector(".cuentaatras")
      let seccioninicio = document.querySelector(".iniciocontador")
     
-    //  * Función Cuenta Atrás
+     //  * Función Cuenta Atrás
      let iniciojuego = setInterval(() => {
        intervalo.textContent = cronometro;
        seccioninicio.classList.remove("invisible")
@@ -185,65 +293,16 @@ function iniciarJuego() {
          player.classList.remove('invisible');
          tries.classList.remove('invisible');
          result.classList.remove('invisible');
+         ranking.classList.remove('invisible');
         };
       }, 1000); 
-  }, 500);
-}
+    }, 500);
+  }
+  
 
-// * Bucle Cartas
-for (const card of cards) {
-  card.addEventListener("click", reveal);  
-}
-
-//
-//! CÓDIGO PARA EJECUTAR EL PROMPT DEL PRINCIPIO
-
-const btn = document.querySelector('.btnStart');
-
-const form = document.forms[0]
-
-const pObligatorio = document.querySelector('.obligatorio');
-function validateName(input) {
-    if (input.value === '') {
-      pObligatorio.textContent = 'Campo Obligatorio *'
-      pObligatorio.classList.add('invalid');
-      return null; 
-    } else if (input.value.length < 3) {
-      pObligatorio.textContent = 'Name too short *'
-      pObligatorio.classList.add('invalid');
-      return null; 
-    } else if (input.value.length > 12){
-      pObligatorio.textContent = 'Name too long *'
-      pObligatorio.classList.add('invalid');
-      return null; 
-    } else {
-      pObligatorio.textContent = '';
-      return input.value;
-    }
-}
-
-function createUserName(userName) {
-    const newUser = document.createElement('p');
-    newUser.textContent = userName.toUpperCase();
-    newUser.style.margin = '15px';
-    return newUser;
-}
-
-
-form.addEventListener('submit', (event) => {
-
-    event.preventDefault();
-    const userName = validateName(form.name);
-
-    if (userName === null) {
-        return;
-    } 
-
-    const newUser = createUserName(userName);
-    player.appendChild(newUser)
-    form.classList.add('invisible')
-
-   reset();
-
-
-})
+  // * Bucle Cartas
+  for (const card of cards) {
+    card.addEventListener("click", reveal);  
+  }
+  
+  //
