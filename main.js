@@ -102,14 +102,19 @@ function getRanking() {
   
   const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
   
+  while (savedScores.length < 3) {
+    savedScores.push({ rankPlayer: '', rankResult: '' });
+  }
+  savedScores.sort((a, b) => a.rankResult - b.rankResult);
+ 
   console.log(savedScores);
 
   const player1 = document.querySelector('.top-players');
   
   player1.innerHTML =`
-  <p>${savedScores[0].rankPlayer}:${savedScores[0].rankResult}</p>
-  <p>${savedScores[1].rankPlayer}:${savedScores[1].rankResult}</p>
-  <p>${savedScores[2].rankPlayer}:${savedScores[2].rankResult}</p>
+  <p>${savedScores[0].rankPlayer} ${savedScores[0].rankResult}</p>
+  <p>${savedScores[1].rankPlayer} ${savedScores[1].rankResult}</p>
+  <p>${savedScores[2].rankPlayer} ${savedScores[2].rankResult}</p>
   `
 
   return savedScores;
