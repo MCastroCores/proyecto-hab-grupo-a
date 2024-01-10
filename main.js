@@ -8,6 +8,8 @@ let numDeclicks = 0;
 //* Constantes del JUEGO 
 const tablero = document.querySelector('.tablero');
 const celdas = document.querySelectorAll('.carta');
+const tries = document.querySelector('.tries');
+const player = document.querySelector('.player');
 
 //* Constantes del FINAL
 const result = document.querySelector('.result');
@@ -105,6 +107,10 @@ function reset() {
   const btnReset = document.querySelector(".reset");
   btnReset.addEventListener('click', () => {
     reset();
+    btnReset.classList.add('invisible');
+         player.classList.add('invisible');
+         tries.classList.add('invisible');
+         result.classList.add('invisible');
   });
 
   // * Función Juego
@@ -175,12 +181,14 @@ function iniciarJuego() {
        if(cronometro === -1){
          clearInterval(iniciojuego);
          seccioninicio.classList.add("invisible");
+         btnReset.classList.remove('invisible');
+         player.classList.remove('invisible');
+         tries.classList.remove('invisible');
+         result.classList.remove('invisible');
         };
       }, 1000); 
   }, 500);
 }
-
-iniciarJuego();
 
 // * Bucle Cartas
 for (const card of cards) {
@@ -216,10 +224,9 @@ function validateName(input) {
 
 function createUserName(userName) {
     const newUser = document.createElement('p');
-    newUser.textContent = userName;
-
+    newUser.textContent = userName.toUpperCase();
+    newUser.style.margin = '15px';
     return newUser;
-
 }
 
 
@@ -233,7 +240,6 @@ form.addEventListener('submit', (event) => {
     } 
 
     const newUser = createUserName(userName);
-    const player = document.querySelector('.player');
     player.appendChild(newUser)
     form.classList.add('invisible')
 
