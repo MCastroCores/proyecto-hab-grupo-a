@@ -138,9 +138,18 @@ function getRanking() {
   const player1 = document.querySelector('.top-players');
   
   player1.innerHTML =`
-  <p>${savedScores[0].rankPlayer} ${savedScores[0].rankResult}</p>
-  <p>${savedScores[1].rankPlayer} ${savedScores[1].rankResult}</p>
-  <p>${savedScores[2].rankPlayer} ${savedScores[2].rankResult}</p>
+  <article class = "punctuation">
+  <p>${savedScores[0].rankPlayer}</p> 
+  <p>${savedScores[0].rankResult}</p>
+  </article>
+  <article class = "punctuation">
+  <p>${savedScores[1].rankPlayer}</p> 
+  <p>${savedScores[1].rankResult}</p>
+  </article>
+  <article class = "punctuation">
+  <p>${savedScores[2].rankPlayer}</p> 
+  <p>${savedScores[2].rankResult}</p>
+  </article>
   `
 
   return savedScores;
@@ -228,11 +237,11 @@ function validateName(input) {
     pObligatorio.classList.add('invalid');
     return null; 
   } else if (input.value.length < 3) {
-    pObligatorio.textContent = 'Name too short *'
+    pObligatorio.textContent =  `Too short *`
     pObligatorio.classList.add('invalid');
     return null; 
-  } else if (input.value.length > 12){
-    pObligatorio.textContent = 'Name too long *'
+  } else if (input.value.length > 7){
+    pObligatorio.textContent = 'Too long *'
     pObligatorio.classList.add('invalid');
     return null; 
   } else {
