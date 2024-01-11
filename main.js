@@ -38,13 +38,13 @@ const pObligatorio = document.querySelector('.obligatorio');
 //* FUNCIÓN SHUFFLINGCARDS, PARA BARAJAR LAS CARTAS
 
 function shufflingCards (array) {
-      for (let i = 0; i < array.length; i++){
-            let j = Math.floor(Math.random()* (i+1));
-        [array[i], array[j]] = [array[j], array[i]]
-    }
-      array.forEach(carta => {
-            tablero.append(carta)
-        });
+  for (let i = 0; i < array.length; i++){
+    let j = Math.floor(Math.random()* (i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  };
+  array.forEach(carta => {
+    tablero.append(carta);
+  });
 };
 
 
@@ -53,7 +53,6 @@ function shufflingCards (array) {
 function showCards() {
   cards.forEach(card => {
     card.classList.add("flipped");
-    
   });
   setTimeout(() => {
     cards.forEach(card => {
@@ -65,38 +64,38 @@ function showCards() {
 
 // * FUNCIÓN WELLDONE, PARA FELICITAR LOS ACIERTOS DURANTE EL JUEGO
 
-  function wellDone() {
-    const congrats = document.createElement('p');
-    congrats.classList.add("felicitar");
-    congrats.textContent = "WELL DONE!";
-    tablero.append(congrats);
-    setTimeout(() => {
-      congrats.remove();
-    }, 1000);
-  };
+function wellDone() {
+  const congrats = document.createElement('p');
+  congrats.classList.add("felicitar");
+  congrats.textContent = "WELL DONE!";
+  tablero.append(congrats);
+  setTimeout(() => {
+    congrats.remove();
+  }, 1000);
+};
   
   
 // * FUNCIÓN YOUWON, PARA FELICITAR LA FINALIZACIÓN DEL JUEGO Y SU LÓGICA POSTERIOR
 
-  function youWon() {
-    const hasGanadoModal = document.createElement('div');    
-    hasGanadoModal.classList.add("fondo");
-    hasGanadoModal.innerHTML = `
-    <div class="finalJuego">YOU WON!</div>
-    `;
-    tablero.append(hasGanadoModal);
-    btnReset.textContent = 'TRY AGAIN';
+function youWon() {
+  const hasGanadoModal = document.createElement('div');    
+  hasGanadoModal.classList.add("fondo");
+  hasGanadoModal.innerHTML = `
+  <div class="finalJuego">YOU WON!</div>
+  `;
+  tablero.append(hasGanadoModal);
+  btnReset.textContent = 'TRY AGAIN';
 
-    console.log(player.firstElementChild.textContent);   
+  console.log(player.firstElementChild.textContent);   
 
-    let rankPlayer = player.firstElementChild.textContent;
+  let rankPlayer = player.firstElementChild.textContent;
 
-    let rankResult = result.textContent;
+  let rankResult = result.textContent;
 
-    saveRanking(rankPlayer, rankResult);
-    
-    getRanking();
-  }
+  saveRanking(rankPlayer, rankResult);
+  
+  getRanking();
+};
 
 // * FUNCIÓN CONGRATS, PARA EJECUTAR LA FUNCIÓN ADECUADA CONGRANTSENDGAME O CONGRATSMIDDLEGAME
   
@@ -121,7 +120,7 @@ function saveRanking(rankPlayer, rankResult) {
 
   localStorage.setItem('scores', JSON.stringify(savedScores));
   
-}
+};
 
 
 //* FUNCIÓN GETRANKING, PARA CARGAR DATOS DE LOCALSTORAGE
@@ -132,7 +131,7 @@ function getRanking() {
   
   while (savedScores.length < 3) {
     savedScores.push({ rankPlayer: '', rankResult: '' });
-  }
+  };
 
   savedScores.sort((a, b) => a.rankResult - b.rankResult);
   const player1 = document.querySelector('.top-players');
@@ -150,82 +149,78 @@ function getRanking() {
   <p>${savedScores[2].rankPlayer}</p> 
   <p>${savedScores[2].rankResult}</p>
   </article>
-  `
+  `;
 
   return savedScores;
 
-}
+};
 
 
 //* FUNCIÓN RESET, PARA REPETIR EL JUEGO SIN TENER QUE VOLVER A INTRODUCIR UN NOMBRE DE USUARIO
 
 function reset() {
-    contador = 0;
-    result.textContent = 0;
-    firstCard = null;
-    startGame();
-    for (const card of cards) {
-      card.classList.remove('flipped');
-      card.addEventListener("click", reveal); 
-    }
-    if (contadorFlipped === 8) {
-      const hasGanadoModalDuplicado = document.querySelector('.fondo');
-      hasGanadoModalDuplicado.remove();
-      
-    }
-    contadorFlipped = 0;
+  contador = 0;
+  result.textContent = 0;
+  firstCard = null;
+  startGame();
+  for (const card of cards) {
+    card.classList.remove('flipped');
+    card.addEventListener("click", reveal); 
+  };
+  if (contadorFlipped === 8) {
+    const hasGanadoModalDuplicado = document.querySelector('.fondo');
+    hasGanadoModalDuplicado.remove();
+  };
+  contadorFlipped = 0;
 
-    getRanking();
-
-  }
+  getRanking();
+};
 
 
 // * FUNCIÓN REVEAL, PARA REALIZAR EL FLIPCARD Y LA LÓGICA DEL JUEGO
 
-  const reveal = (e) => {
-    if (numDeclicks < 2) {
-    const currentCard = e.currentTarget;
-     if (currentCard.classList.contains("flipped")) {
-      return;
-    }
-    currentCard.classList.add("flipped");
-    if (firstCard === null) {
-      firstCard = currentCard;
-      return;
-    } else if (firstCard !== null)  {
-      const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
-      const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
+const reveal = (e) => {
+  if (numDeclicks < 2) {
+  const currentCard = e.currentTarget;
+    if (currentCard.classList.contains("flipped")) {
+    return;
+    };
+  currentCard.classList.add("flipped");
+  if (firstCard === null) {
+    firstCard = currentCard;
+    return;
+  } else if (firstCard !== null) {
+    const firstCardValue = firstCard.firstElementChild.lastElementChild.textContent;
+    const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
 
-      if (firstCardValue === secondCardValue) {
-        currentCard.removeEventListener('click', reveal);
-        firstCard.removeEventListener('click', reveal);
-        contador ++;
-        result.textContent = contador;
+    if (firstCardValue === secondCardValue) {
+      currentCard.removeEventListener('click', reveal);
+      firstCard.removeEventListener('click', reveal);
+      contador ++;
+      result.textContent = contador;
+      firstCard = null;
+      contadorFlipped ++;
+      console.log(contadorFlipped);
+      congrats();
+      return contadorFlipped;
+    
+    } else {
+      setTimeout(() => {
+        firstCard.classList.remove("flipped");
+        currentCard.classList.remove("flipped");
         firstCard = null;
-        contadorFlipped ++;
-        console.log(contadorFlipped);
-        congrats();
-        return contadorFlipped;
-        
-      } else {
-        
-        setTimeout(() => {
-          firstCard.classList.remove("flipped");
-          currentCard.classList.remove("flipped");
-          firstCard = null;
-        }, 1000);
-        contador ++;
-        result.textContent = contador;
-      }
-    }
+      }, 1000);
+      contador ++;
+      result.textContent = contador;
+    };
+  };
     numDeclicks++
     if (numDeclicks = 2){
       setTimeout(() => {
         numDeclicks = 0
-        
       }, 1050);
-      }
-    }
+    };
+  };
 };
 
 
@@ -233,7 +228,7 @@ function reset() {
 
 function validateName(input) {
   if (input.value === '') {
-    pObligatorio.textContent = 'Campo Obligatorio *'
+    pObligatorio.textContent = 'Required *'
     pObligatorio.classList.add('invalid');
     return null; 
   } else if (input.value.length < 3) {
@@ -247,8 +242,8 @@ function validateName(input) {
   } else {
     pObligatorio.textContent = '';
     return input.value;
-  }
-}
+  };
+};
 
 
 //* FUNCIÓN CREATEUSERNAME, PARA CREAR EL ELEMENTO EN EL JUEGO PARA EL NOMBRE DE USUARIO
@@ -258,7 +253,7 @@ function createUserName(userName) {
   newUser.textContent = userName.toUpperCase();
   newUser.style.margin = '15px';
   return newUser;
-}
+};
 
 
 //* FUNCIÓN STARTGAME, PARA INICIAR EL JUEGO
@@ -269,26 +264,26 @@ function startGame() {
     showCards(cards);
     // * Constantes Cuenta Atrás
     let cronometro = 5;
-     let intervalo = document.querySelector(".cuentaatras")
-     let seccioninicio = document.querySelector(".iniciocontador")
+    let intervalo = document.querySelector(".cuentaatras")
+    let seccioninicio = document.querySelector(".iniciocontador")
     
      //  * Función Cuenta Atrás
-     let iniciojuego = setInterval(() => {
-       intervalo.textContent = cronometro;
-       seccioninicio.classList.remove("invisible")
-       cronometro--;
-       if(cronometro === -1){
-         clearInterval(iniciojuego);
-         seccioninicio.classList.add("invisible");
-         btnReset.classList.remove('invisible');
-         player.classList.remove('invisible');
-         tries.classList.remove('invisible');
-         result.classList.remove('invisible');
-         ranking.classList.remove('invisible');
-        };
-      }, 1000); 
-    }, 500);
-  }
+    let iniciojuego = setInterval(() => {
+      intervalo.textContent = cronometro;
+      seccioninicio.classList.remove("invisible")
+      cronometro--;
+      if(cronometro === -1){
+        clearInterval(iniciojuego);
+        seccioninicio.classList.add("invisible");
+        btnReset.classList.remove('invisible');
+        player.classList.remove('invisible');
+        tries.classList.remove('invisible');
+        result.classList.remove('invisible');
+        ranking.classList.remove('invisible');
+      };
+    }, 1000); 
+  }, 500);
+};
 
 
 //? AQUÍ EMPIEZA LA EJECUCIÓN DE NUESTRO CÓDIGO Y LOS EVENTOS DISPONIBLES
@@ -303,18 +298,15 @@ form.addEventListener('submit', (event) => {
   
   if (userName === null) {
     return;
-  } 
+  };
   
   const newUser = createUserName(userName);
-  player.appendChild(newUser)
-  form.classList.add('invisible')
+  player.appendChild(newUser);
+  form.classList.add('invisible');
   
   reset();
 
   getRanking();
-
-  
-  
 });
 
 
@@ -324,10 +316,10 @@ const btnReset = document.querySelector(".reset");
 btnReset.addEventListener('click', () => {
   reset();
   btnReset.classList.add('invisible');
-       player.classList.add('invisible');
-       tries.classList.add('invisible');
-       result.classList.add('invisible');
-       ranking.classList.add('invisible');
+  player.classList.add('invisible');
+  tries.classList.add('invisible');
+  result.classList.add('invisible');
+  ranking.classList.add('invisible');
 });
 
 
@@ -338,18 +330,9 @@ btnStage.addEventListener('click', () => {
 
   const changeColor = document.querySelector('.change-color');
 
-  if (changeColor.getAttribute("href") === "styles.css") {
-    changeColor.setAttribute("href", "styles2.css")
-  }
-    else {
-      changeColor.setAttribute("href", "styles.css")
-    }
-
-})
-
-
-
-
-
-
-
+  if (changeColor.getAttribute("href") === "styles/styles-theme.css") {
+    changeColor.setAttribute("href", "styles/styles.css");
+  } else {
+    changeColor.setAttribute("href", "styles/styles-theme.css");
+  };
+});
