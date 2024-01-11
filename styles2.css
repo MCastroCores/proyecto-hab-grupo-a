@@ -5,11 +5,11 @@
 }
 
 :root {
-  --morado1: rgb(61, 0, 102);
-  --morado2: rgb(81, 0, 135);
-  --morado3: rgb(92, 0, 153);
-  --amarillo1: rgb(253, 197, 0);
-  --amarillo2: rgb(255, 213, 0);
+  --morado1: rgb(20, 23, 197);
+  --morado2: rgb(8, 3, 78);
+  --morado3: rgb(9, 2, 44);
+  --amarillo1: rgb(20, 109, 43);
+  --amarillo2: rgb(20, 109, 43);
 }
 
 body {
@@ -380,33 +380,4 @@ button.reset {
   .back {
     font-size: 3rem;
   }
-}
-
-body.cambiocolor {
-  background-color: aqua;
-  color: white;
-}
-
-header.cambiocolor {
-  background-color: black;
-}
-
-main.cambiocolor {
-  background-color: black;
-}
-
-aside.cambiocolor {
-  background-color: black;
-}
-
-aside.cambiocolor {
-  background-color: black;
-}
-
-aside.cambiocolor {
-  background-color: black;
-}
-
-aside.cambiocolor {
-  background-color: black;
 }

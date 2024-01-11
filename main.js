@@ -1,34 +1,45 @@
 'use strict'
-// TODO. AQUÍ EMPIEZAN LAS CONSTANTES
-//* Constantes del HTML
+
+//? AQUÍ EMPIEZAN LAS CONSTANTES
+
+
+//* CONSTANTES PARA EL HTML
 const cards = document.querySelectorAll(".card");
 let firstCard = null;
 let numDeclicks = 0;
 
-//* Constantes del JUEGO 
+//* CONSTANTES DEL JUEGO
 const tablero = document.querySelector('.tablero');
 const celdas = document.querySelectorAll('.carta');
 const tries = document.querySelector('.tries');
 const player = document.querySelector('.player');
 const ranking = document.querySelector('.rank');
 
-//* Constantes del FINAL
+//* CONSTANTES DE CONGRATS
 const result = document.querySelector('.result');
 let contador = 0;
 let contadorFlipped = 0;
 
-// *Constantes Barajar
+// *CONSTANTES DE SHUFFLING CARDS
 
 const cartasArray = Array.from(celdas);
 let j = 0;
 
-// TODO. AQUÍ EMPIEZAN LAS FUNCIONES
-//*Funcion Barajar 
+//* CONSTANTES PARA INICIAR EL JUEGO CON EL FORMULARIO
 
-function barajar (array) {
+const btn = document.querySelector('.btnStart');
+const form = document.forms[0]
+const pObligatorio = document.querySelector('.obligatorio');
+
+
+//? AQUÍ EMPIEZAN LAS FUNCIONES
+
+
+//* FUNCIÓN SHUFFLINGCARDS, PARA BARAJAR LAS CARTAS
+
+function shufflingCards (array) {
       for (let i = 0; i < array.length; i++){
-            let j = Math.floor(Math.random()* (i+1)) 
-        console.log(j);
+            let j = Math.floor(Math.random()* (i+1));
         [array[i], array[j]] = [array[j], array[i]]
     }
       array.forEach(carta => {
@@ -37,9 +48,9 @@ function barajar (array) {
 };
 
 
-//* Función Mostrar Cartas
+//* FUNCIÓN SHOWCARDS, PARA MOSTRAR LAS CARTAS Y LUEGO OCULTARLAS
 
-function mostrarCartas() {
+function showCards() {
   cards.forEach(card => {
     card.classList.add("flipped");
     
@@ -52,8 +63,9 @@ function mostrarCartas() {
 };
 
 
-  // * Función Felicitar
-  function felicitar() {
+// * FUNCIÓN WELLDONE, PARA FELICITAR LOS ACIERTOS DURANTE EL JUEGO
+
+  function wellDone() {
     const congrats = document.createElement('p');
     congrats.classList.add("felicitar");
     congrats.textContent = "WELL DONE!";
@@ -63,15 +75,17 @@ function mostrarCartas() {
     }, 1000);
   };
   
-  // *Funcion HAS GANADO
-  function finalJuego() {
+  
+// * FUNCIÓN YOUWON, PARA FELICITAR LA FINALIZACIÓN DEL JUEGO Y SU LÓGICA POSTERIOR
+
+  function youWon() {
     const hasGanadoModal = document.createElement('div');    
     hasGanadoModal.classList.add("fondo");
     hasGanadoModal.innerHTML = `
     <div class="finalJuego">YOU WON!</div>
     `;
     tablero.append(hasGanadoModal);
-    btnReset.textContent = 'Prueba otra vez';
+    btnReset.textContent = 'TRY AGAIN';
 
     console.log(player.firstElementChild.textContent);   
 
@@ -80,14 +94,25 @@ function mostrarCartas() {
     let rankResult = result.textContent;
 
     saveRanking(rankPlayer, rankResult);
+    
+    getRanking();
   }
-  
 
+// * FUNCIÓN CONGRATS, PARA EJECUTAR LA FUNCIÓN ADECUADA CONGRANTSENDGAME O CONGRATSMIDDLEGAME
+  
+const congrats = () => {
+  if (contadorFlipped === 8){
+    youWon();
+  } else {
+    wellDone();
+  };
+};
+
+
+//* FUNCIÓN SAVERANKING, PARA GUARDAR DATOS EN LOCALSTORAGE
 
 function saveRanking(rankPlayer, rankResult) {
 
-  
-  
   const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
 
   savedScores.push({rankPlayer, rankResult});
@@ -98,6 +123,9 @@ function saveRanking(rankPlayer, rankResult) {
   
 }
 
+
+//* FUNCIÓN GETRANKING, PARA CARGAR DATOS DE LOCALSTORAGE
+
 function getRanking() {
   
   const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
@@ -105,10 +133,8 @@ function getRanking() {
   while (savedScores.length < 3) {
     savedScores.push({ rankPlayer: '', rankResult: '' });
   }
-  savedScores.sort((a, b) => a.rankResult - b.rankResult);
- 
-  console.log(savedScores);
 
+  savedScores.sort((a, b) => a.rankResult - b.rankResult);
   const player1 = document.querySelector('.top-players');
   
   player1.innerHTML =`
@@ -122,25 +148,13 @@ function getRanking() {
 }
 
 
-
-
-  // * Funcion Fin de Juego
-  
-  const finalizar = () => {
-    if (contadorFlipped === 8){
-      finalJuego();
-    } else {
-      felicitar();
-    };
-  };
-
-  //* Función RESET
+//* FUNCIÓN RESET, PARA REPETIR EL JUEGO SIN TENER QUE VOLVER A INTRODUCIR UN NOMBRE DE USUARIO
 
 function reset() {
     contador = 0;
     result.textContent = 0;
     firstCard = null;
-    iniciarJuego();
+    startGame();
     for (const card of cards) {
       card.classList.remove('flipped');
       card.addEventListener("click", reveal); 
@@ -156,19 +170,9 @@ function reset() {
 
   }
 
-  // * Boton Reset
-  
-  const btnReset = document.querySelector(".reset");
-  btnReset.addEventListener('click', () => {
-    reset();
-    btnReset.classList.add('invisible');
-         player.classList.add('invisible');
-         tries.classList.add('invisible');
-         result.classList.add('invisible');
-         ranking.classList.add('invisible');
-  });
 
-  // * Función Juego
+// * FUNCIÓN REVEAL, PARA REALIZAR EL FLIPCARD Y LA LÓGICA DEL JUEGO
+
   const reveal = (e) => {
     if (numDeclicks < 2) {
     const currentCard = e.currentTarget;
@@ -184,7 +188,6 @@ function reset() {
       const secondCardValue = currentCard.firstElementChild.lastElementChild.textContent;
 
       if (firstCardValue === secondCardValue) {
-        console.log("coinciden");
         currentCard.removeEventListener('click', reveal);
         firstCard.removeEventListener('click', reveal);
         contador ++;
@@ -192,7 +195,7 @@ function reset() {
         firstCard = null;
         contadorFlipped ++;
         console.log(contadorFlipped);
-        finalizar();
+        congrats();
         return contadorFlipped;
         
       } else {
@@ -216,13 +219,8 @@ function reset() {
     }
 };
 
-//! CÓDIGO PARA EJECUTAR EL PROMPT DEL PRINCIPIO
 
-const btn = document.querySelector('.btnStart');
-
-const form = document.forms[0]
-
-const pObligatorio = document.querySelector('.obligatorio');
+//* FUNCIÓN VALIDATENAME, PARA VALIDAR NOMBRE DE USUARIO
 
 function validateName(input) {
   if (input.value === '') {
@@ -243,13 +241,51 @@ function validateName(input) {
   }
 }
 
+
+//* FUNCIÓN CREATEUSERNAME, PARA CREAR EL ELEMENTO EN EL JUEGO PARA EL NOMBRE DE USUARIO
+
 function createUserName(userName) {
   const newUser = document.createElement('p');
   newUser.textContent = userName.toUpperCase();
   newUser.style.margin = '15px';
   return newUser;
 }
-  
+
+
+//* FUNCIÓN STARTGAME, PARA INICIAR EL JUEGO
+
+function startGame() {
+  shufflingCards(cartasArray);
+  const start = setTimeout(() => {
+    showCards(cards);
+    // * Constantes Cuenta Atrás
+    let cronometro = 5;
+     let intervalo = document.querySelector(".cuentaatras")
+     let seccioninicio = document.querySelector(".iniciocontador")
+    
+     //  * Función Cuenta Atrás
+     let iniciojuego = setInterval(() => {
+       intervalo.textContent = cronometro;
+       seccioninicio.classList.remove("invisible")
+       cronometro--;
+       if(cronometro === -1){
+         clearInterval(iniciojuego);
+         seccioninicio.classList.add("invisible");
+         btnReset.classList.remove('invisible');
+         player.classList.remove('invisible');
+         tries.classList.remove('invisible');
+         result.classList.remove('invisible');
+         ranking.classList.remove('invisible');
+        };
+      }, 1000); 
+    }, 500);
+  }
+
+
+//? AQUÍ EMPIEZA LA EJECUCIÓN DE NUESTRO CÓDIGO Y LOS EVENTOS DISPONIBLES
+
+
+//* EVENTO EN EL FORMULARIO DEL MODAL PRINCIPAL, PARA CUANDO REALICEMOS EL SUBMIT EMPEZAR TODA LA LÓGICA DE NUESTRO JUEGO
 
 form.addEventListener('submit', (event) => {
   
@@ -273,41 +309,38 @@ form.addEventListener('submit', (event) => {
 });
 
 
-
-// TODO. AQUÍ EMPIEZAN LA PILA DE EJECUCIÓN
-// ? AQUÍ ORDENAMOS CODIGO EN FUNCIÓN DE SUS PASOS
-
-function iniciarJuego() {
-  barajar(cartasArray);
-  const start = setTimeout(() => {
-    mostrarCartas(cards);
-    // * Constantes Cuenta Atrás
-    let cronometro = 5;
-     let intervalo = document.querySelector(".cuentaatras")
-     let seccioninicio = document.querySelector(".iniciocontador")
-    
-     //  * Función Cuenta Atrás
-     let iniciojuego = setInterval(() => {
-       intervalo.textContent = cronometro;
-       seccioninicio.classList.remove("invisible")
-       cronometro--;
-       if(cronometro === -1){
-         clearInterval(iniciojuego);
-         seccioninicio.classList.add("invisible");
-         btnReset.classList.remove('invisible');
-         player.classList.remove('invisible');
-         tries.classList.remove('invisible');
-         result.classList.remove('invisible');
-         ranking.classList.remove('invisible');
-        };
-      }, 1000); 
-    }, 500);
-  }
+//* EVENTO DE CLICK PARA EL BOTÓN RESET
   
+const btnReset = document.querySelector(".reset");
+btnReset.addEventListener('click', () => {
+  reset();
+  btnReset.classList.add('invisible');
+       player.classList.add('invisible');
+       tries.classList.add('invisible');
+       result.classList.add('invisible');
+       ranking.classList.add('invisible');
+});
 
-  // * Bucle Cartas
-  for (const card of cards) {
-    card.addEventListener("click", reveal);  
+
+//* EVENTO DE CLICK PARA EL BOTÓN STAGE
+
+const btnStage = document.querySelector('.stage');
+btnStage.addEventListener('click', () => {
+
+  const changeColor = document.querySelector('.change-color');
+
+  if (changeColor.getAttribute("href") === "styles.css") {
+    changeColor.setAttribute("href", "styles2.css")
   }
-  
-  //
+    else {
+      changeColor.setAttribute("href", "styles.css")
+    }
+
+})
+
+
+
+
+
+
+
