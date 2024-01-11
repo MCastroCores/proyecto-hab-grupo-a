@@ -3,12 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
-    <link rel="preload" href="./media/pexels-element-digital-1293269.jpg" as="image">
-    <title>JUEGO DE CARTAS</title>
+    <link rel="stylesheet" class="change-color" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      href="./media/pexels-element-digital-1293269.jpg"
+      as="image"
+    />
+    <title>FIND THE COUPLE</title>
   </head>
   <body>
     <form class="prompt">
@@ -18,8 +25,9 @@
         <button class="btnStart" type="submit">START GAME</button>
       </div>
     </form>
-    <header>
-      <h1>JUEGO DE PAREJAS</h1>
+    <header class="header">
+      <h1>FIND THE COUPLE</h1>
+      <button type="submit" class="stage">CHANGE STAGE</button>
     </header>
     <main class="tablero">
       <div class="carta">
@@ -151,21 +159,21 @@
         </section>
       </div>
     </main>
-    <aside>
+    <aside class="aside">
       <section>
-        <article class="player invisible">JUGADOR</article>
-        <article class="tries invisible">INTENTOS</article>
+        <article class="player invisible">PLAYER</article>
+        <article class="tries invisible">COUNT:</article>
         <article class="result invisible">0</article>
       </section>
       <section class="iniciocontador invisible">
-        Empieza en:
+        STARTS:
         <p class="cuentaatras"></p>
       </section>
       <section class="rank invisible">
-          <p>ranking</p>
-          <div class="top-players"></div>
+        <p>ranking</p>
+        <div class="top-players"></div>
       </section>
-      <button class="reset invisible">Reset</button>
+      <button class="reset invisible">RESET</button>
     </aside>
     <script src="./main.js"></script>
   </body>
